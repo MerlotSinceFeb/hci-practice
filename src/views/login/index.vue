@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h2 class="title">环境应急管理系统</h2>
       </div>
 
       <el-form-item prop="username">
@@ -44,8 +44,17 @@
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
       <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
+        <span style="margin-right:20px;">
+          超级管理员账号: admin
+          <br>
+          工作人员账号: worker
+          <br>
+          指挥人员账号: monitor
+          <br>
+          专家人员: expert
+          <br>
+          密码: 不低于6位即可
+        </span>
       </div>
 
     </el-form>
@@ -187,7 +196,7 @@ $light_gray:#eee;
     position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 250px 35px 0;
     margin: 0 auto;
     overflow: hidden;
   }
