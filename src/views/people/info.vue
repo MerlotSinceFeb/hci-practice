@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-row style="margin: auto;">
-      <div style="width: 95%; margin: auto; padding: 20px; box-shadow: 0 2px 4px rgba(0, 0, 0, .12)">
+      <div class="row-block">
         <el-row class="custom-row">
-          <el-button type="primary" plain>新增</el-button>
-          <el-button type="success" plain>修改</el-button>
+          <el-button type="primary" plain @click="openCreateDialog = true">新增</el-button>
+          <el-button type="success" plain @click="openModifyDialog = true">修改</el-button>
           <el-button type="info" plain>删除</el-button>
         </el-row>
         <el-row class="custom-row">
@@ -66,12 +66,104 @@
             <el-pagination
               background
               layout="prev, pager, next"
-              :total="1000">
+              :total="1000"
+            >
             </el-pagination>
           </div>
         </el-row>
       </div>
     </el-row>
+    <el-row>
+      <div class="row-block" style="margin-top: 50px">
+        <el-divider content-position="left">组合条件搜索</el-divider>
+        <el-form :inline="true" :model="account" class="demo-form-inline" :label-position="formPosition" label-width="80px">
+          <el-row>
+            <el-col :span="5">
+              <el-form-item label="ID">
+                <el-input v-model="account.ID" placeholder="ID"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="账号">
+                <el-input v-model="account.username" placeholder="账号"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="姓名">
+                <el-input v-model="account.name" placeholder="姓名"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="5">
+              <el-form-item label="性别">
+                <el-radio v-model="account.sex" label="男">男</el-radio>
+                <el-radio v-model="account.sex" label="女">女</el-radio>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="出生日期">
+                <el-date-picker
+                  v-model="account.birthday"
+                  type="date"
+                  placeholder="选择日期"
+                >
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="账号类型">
+                <el-select v-model="account.userType" placeholder="账号类型">
+                  <el-option label="超级管理员" value="超级管理员"></el-option>
+                  <el-option label="工作人员" value="工作人员"></el-option>
+                  <el-option label="指挥人员" value="指挥人员"></el-option>
+                  <el-option label="专家人员" value="专家人员"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="5">
+              <el-form-item label="账号状态">
+                <el-select v-model="account.status" placeholder="账号状态">
+                  <el-option label="正常" value="正常"></el-option>
+                  <el-option label="停用" value="停用"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item>
+                <el-button type="primary" @click="onSubmit">查询</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
+    </el-row>
+    <el-dialog
+      title="账号注册"
+      :visible.sync="openCreateDialog"
+      width="30%"
+      center
+    >
+      <span>待添加</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="openCreateDialog = false">取 消</el-button>
+        <el-button type="primary" @click="createUser">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="账号修改"
+      :visible.sync="openModifyDialog"
+      width="30%"
+      center
+    >
+      <span>待添加</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="openModifyDialog = false">取 消</el-button>
+        <el-button type="primary" @click="modifyUser">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -79,6 +171,8 @@
 export default {
   data() {
     return {
+      openCreateDialog: false,
+      openModifyDialog: false,
       tableData: [{
         ID: '1',
         username: 'admin',
@@ -134,22 +228,31 @@ export default {
         userType: '超级管理员',
         status: '正常'
       }],
-      multipleSelection: []
+      multipleSelection: [],
+      account: {
+        ID: '',
+        username: '',
+        name: '',
+        sex: '',
+        birthday: '',
+        userType: '',
+        status: ''
+      },
+      formPosition: 'right'
     }
   },
 
   methods: {
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row)
-        })
-      } else {
-        this.$refs.multipleTable.clearSelection()
-      }
-    },
     handleSelectionChange(val) {
       this.multipleSelection = val
+    },
+    onSubmit() {
+    },
+    createUser() {
+      this.openCreateDialog = false
+    },
+    modifyUser() {
+      this.openModifyDialog = false
     }
   }
 }
@@ -157,7 +260,14 @@ export default {
 
 <style scoped>
 
-.custom-row{
+.custom-row {
   padding-bottom: 10px;
+}
+
+.row-block {
+  width: 95%;
+  margin: auto;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
 }
 </style>
