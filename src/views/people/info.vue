@@ -74,44 +74,34 @@
       </div>
     </el-row>
     <el-row>
-      <div class="row-block" style="margin-top: 50px">
+      <div class="row-block" style="margin-top: 10px">
         <el-divider content-position="left">组合条件搜索</el-divider>
         <el-form :inline="true" :model="account" class="demo-form-inline" :label-position="formPosition" label-width="80px">
           <el-row>
-            <el-col :span="5">
+            <el-col :span="6">
               <el-form-item label="ID">
                 <el-input v-model="account.ID" placeholder="ID"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="6">
               <el-form-item label="账号">
                 <el-input v-model="account.username" placeholder="账号"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="6">
               <el-form-item label="姓名">
                 <el-input v-model="account.name" placeholder="姓名"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="5">
+            <el-col :span="6">
               <el-form-item label="性别">
                 <el-radio v-model="account.sex" label="男">男</el-radio>
                 <el-radio v-model="account.sex" label="女">女</el-radio>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
-              <el-form-item label="出生日期">
-                <el-date-picker
-                  v-model="account.birthday"
-                  type="date"
-                  placeholder="选择日期"
-                >
-                </el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="5">
+          </el-row>
+          <el-row>
+            <el-col :span="6">
               <el-form-item label="账号类型">
                 <el-select v-model="account.userType" placeholder="账号类型">
                   <el-option label="超级管理员" value="超级管理员"></el-option>
@@ -121,14 +111,22 @@
                 </el-select>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="5">
+            <el-col :span="6">
               <el-form-item label="账号状态">
                 <el-select v-model="account.status" placeholder="账号状态">
                   <el-option label="正常" value="正常"></el-option>
                   <el-option label="停用" value="停用"></el-option>
                 </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="7">
+              <el-form-item label="出生日期">
+                <el-date-picker
+                  v-model="account.birthday"
+                  type="date"
+                  placeholder="选择日期"
+                >
+                </el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="5">
