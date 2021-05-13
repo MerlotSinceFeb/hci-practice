@@ -248,7 +248,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="resetModifyUser('changeUser')">取 消</el-button>
-        <el-button type="primary" @click="modifyUser('changeUser')">确 定</el-button>
+        <el-button type="primary" :disabled="modifyUserBtnIsDisable" @click="modifyUser('changeUser')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -259,6 +259,7 @@ export default {
   data() {
     return {
       createUserBtnIsDisable: false,
+      modifyUserBtnIsDisable: false,
       newUser: {
         ID: '',
         username: '',
@@ -569,7 +570,35 @@ export default {
         if (!valid) {
           return false
         }
+        // 禁用修改按钮
+        this.modifyUserBtnIsDisable = true
+        // 补充修改信息
+        this.rawUser.ID = this.changeUser.ID
+        this.rawUser.status = this.changeUser.status
+        this.rawUser.username = this.changeUser.username
+        this.rawUser.password = this.changeUser.newPassword
+        this.rawUser.name = this.changeUser.name
+        this.rawUser.sex = this.changeUser.sex
+        this.rawUser.birthday = this.changeUser.birthday
+        this.rawUser.userType = this.changeUser.userType
+        // 修改用户信息
+        for (let i = 0; i < this.rawUserList.length; i++) {
+          if (this.rawUserList[i].ID === this.rawUser.ID) {
+            this.rawUserList[i] = this.rawUser
+            break
+          }
+        }
+        this.userList = this.rawUserList
+        // 还原控件状态
         this.openModifyDialog = false
+        this.modifyUserBtnIsDisable = false
+        this.$refs[formName].resetFields()
+        this.changeUser.confirm = ''
+        // 消息提示
+        this.$message({
+          type: 'success',
+          message: '修改用户成功!'
+        })
         return true
       })
     },
