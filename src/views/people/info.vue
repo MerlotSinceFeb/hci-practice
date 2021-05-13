@@ -10,9 +10,10 @@
         <el-row class="custom-row">
           <el-table
             ref="multipleTable"
-            :data="tableData"
+            :data="userList"
             tooltip-effect="dark"
             border
+            height="330"
             @selection-change="handleSelectionChange"
           >
             <el-table-column
@@ -120,12 +121,14 @@
                   v-model="account.birthday"
                   type="date"
                   placeholder="选择日期"
+                  value-format="yyyy-MM-dd"
                 />
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item>
-                <el-button type="primary" @click="onSubmit">查询</el-button>
+                <el-button type="primary" @click="searchUser">查询</el-button>
+                <el-button type="success" @click="resetUserList">重置</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -138,7 +141,7 @@
       width="30%"
       center
     >
-      <div style="font-size: 50px">
+      <div>
         <el-form
           ref="newUser"
           :model="newUser"
@@ -146,21 +149,27 @@
           label-width="80px"
         >
           <el-form-item label="账号">
-            <el-input v-model="newUser.username" placeholder="请输入账号"/>
+            <el-input v-model="newUser.username" placeholder="请输入账号" />
           </el-form-item>
           <el-form-item label="密码">
-            <el-input v-model="newUser.password" type="password" auto-complete="off" />
+            <el-input v-model="newUser.password" type="password" auto-complete="off" placeholder="请输入密码" />
           </el-form-item>
           <el-form-item label="确认密码">
-            <el-input v-model="newUser.confirm" type="password" auto-complete="off" />
+            <el-input v-model="newUser.confirm" type="password" auto-complete="off" placeholder="请再次确认密码" />
           </el-form-item>
-          <div style="width: 90%; margin: auto" />
-          <span slot="footer" class="dialog-footer">
-          <el-button @click="openCreateDialog = false">取 消</el-button>
-          <el-button type="primary" @click="createUser">确 定</el-button>
-        </span>
+          <el-form-item label="姓名">
+            <el-input v-model="newUser.name" placeholder="请输入姓名" />
+          </el-form-item>
+          <el-form-item label="性别">
+            <el-radio v-model="newUser.sex" label="男">男</el-radio>
+            <el-radio v-model="newUser.sex" label="女">女</el-radio>
+          </el-form-item>
         </el-form>
       </div>
+      <span slot="footer" class="dialog-footer" style="margin: auto">
+        <el-button @click="openCreateDialog = false">取 消</el-button>
+        <el-button type="primary" @click="createUser">确 定</el-button>
+      </span>
     </el-dialog>
     <el-dialog
       title="账号修改"
@@ -194,13 +203,13 @@ export default {
       },
       openCreateDialog: false,
       openModifyDialog: false,
-      tableData: [{
+      userList: [{
         ID: '1',
         username: 'admin',
         password: '123456789',
         name: '张三',
         sex: '男',
-        birthday: '2021/05/12',
+        birthday: '2021-05-12',
         userType: '超级管理员',
         status: '正常'
       }, {
@@ -209,7 +218,7 @@ export default {
         password: '123456789',
         name: '李四',
         sex: '女',
-        birthday: '2021/05/12',
+        birthday: '2021-05-12',
         userType: '工作人员',
         status: '正常'
       }, {
@@ -218,7 +227,7 @@ export default {
         password: '123456789',
         name: '王五',
         sex: '男',
-        birthday: '2021/05/12',
+        birthday: '2021-05-12',
         userType: '指挥人员',
         status: '正常'
       }, {
@@ -227,16 +236,16 @@ export default {
         password: '123456789',
         name: '赵六',
         sex: '女',
-        birthday: '2021/05/12',
+        birthday: '2021-05-12',
         userType: '专家人员',
         status: '停用'
       }, {
         ID: '5',
-        username: 'expert',
+        username: 'expert01',
         password: '123456789',
         name: '张麻子',
         sex: '男',
-        birthday: '2021/05/12',
+        birthday: '2021-05-12',
         userType: '专家人员',
         status: '正常'
       }, {
@@ -245,7 +254,62 @@ export default {
         password: '123456789',
         name: '黄四郎',
         sex: '男',
-        birthday: '2021/05/12',
+        birthday: '2021-05-11',
+        userType: '超级管理员',
+        status: '正常'
+      }],
+      rawUserList: [{
+        ID: '1',
+        username: 'admin',
+        password: '123456789',
+        name: '张三',
+        sex: '男',
+        birthday: '2021-05-12',
+        userType: '超级管理员',
+        status: '正常'
+      }, {
+        ID: '2',
+        username: 'worker',
+        password: '123456789',
+        name: '李四',
+        sex: '女',
+        birthday: '2021-05-12',
+        userType: '工作人员',
+        status: '正常'
+      }, {
+        ID: '3',
+        username: 'monitor',
+        password: '123456789',
+        name: '王五',
+        sex: '男',
+        birthday: '2021-05-12',
+        userType: '指挥人员',
+        status: '正常'
+      }, {
+        ID: '4',
+        username: 'expert',
+        password: '123456789',
+        name: '赵六',
+        sex: '女',
+        birthday: '2021-05-12',
+        userType: '专家人员',
+        status: '停用'
+      }, {
+        ID: '5',
+        username: 'expert01',
+        password: '123456789',
+        name: '张麻子',
+        sex: '男',
+        birthday: '2021-05-12',
+        userType: '专家人员',
+        status: '正常'
+      }, {
+        ID: '6',
+        username: 'admin',
+        password: '123456789',
+        name: '黄四郎',
+        sex: '男',
+        birthday: '2021-05-11',
         userType: '超级管理员',
         status: '正常'
       }],
@@ -267,7 +331,26 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val
     },
-    onSubmit() {
+    searchUser() {
+      // 遍历userList列表找到符合条件的记录
+      this.userList = this.rawUserList.filter(user => {
+        return this.account.ID === user.ID || this.account.username === user.username ||
+          this.account.status === user.status || this.account.userType === user.userType ||
+          this.account.birthday === user.birthday || this.account.sex === user.sex ||
+          this.account.name === user.name
+      })
+    },
+    resetUserList() {
+      // 重置列表页数据
+      this.userList = this.rawUserList
+      // 清空查询表单数据
+      this.account.birthday = ''
+      this.account.name = ''
+      this.account.sex = ''
+      this.account.userType = ''
+      this.account.status = ''
+      this.account.ID = ''
+      this.account.username = ''
     },
     createUser() {
       this.openCreateDialog = false
@@ -290,5 +373,10 @@ export default {
   margin: auto;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
+}
+
+.center-block {
+  width: 95%;
+  margin: auto;
 }
 </style>
