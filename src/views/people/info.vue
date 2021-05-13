@@ -164,6 +164,22 @@
             <el-radio v-model="newUser.sex" label="男">男</el-radio>
             <el-radio v-model="newUser.sex" label="女">女</el-radio>
           </el-form-item>
+          <el-form-item label="出生日期">
+            <el-date-picker
+              v-model="newUser.birthday"
+              type="date"
+              placeholder="选择日期"
+              value-format="yyyy-MM-dd"
+            />
+          </el-form-item>
+          <el-form-item label="账号类型">
+            <el-select v-model="newUser.userType" placeholder="账号类型">
+              <el-option label="超级管理员" value="超级管理员" />
+              <el-option label="工作人员" value="工作人员" />
+              <el-option label="指挥人员" value="指挥人员" />
+              <el-option label="专家人员" value="专家人员" />
+            </el-select>
+          </el-form-item>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer" style="margin: auto">
@@ -177,7 +193,56 @@
       width="30%"
       center
     >
-      <span>待添加</span>
+      <div>
+        <el-form
+          ref="changeUser"
+          :model="changeUser"
+          status-icon
+          label-width="80px"
+        >
+          <el-form-item label="用户账号">
+            <el-input v-model="changeUser.username" placeholder="请输入姓名" disabled />
+          </el-form-item>
+          <el-form-item label="当前密码">
+            <el-input v-model="changeUser.oldPassword" type="password" auto-complete="off" disabled />
+          </el-form-item>
+          <el-form-item label="新密码">
+            <el-input v-model="changeUser.newPassword" type="password" auto-complete="off" placeholder="请输入新密码" />
+          </el-form-item>
+          <el-form-item label="再次确认">
+            <el-input v-model="changeUser.confirm" type="password" auto-complete="off" placeholder="请再次确认新密码" />
+          </el-form-item>
+          <el-form-item label="姓名">
+            <el-input v-model="changeUser.name" placeholder="请输入姓名" />
+          </el-form-item>
+          <el-form-item label="性别">
+            <el-radio v-model="changeUser.sex" label="男">男</el-radio>
+            <el-radio v-model="changeUser.sex" label="女">女</el-radio>
+          </el-form-item>
+          <el-form-item label="出生日期">
+            <el-date-picker
+              v-model="changeUser.birthday"
+              type="date"
+              placeholder="选择日期"
+              value-format="yyyy-MM-dd"
+            />
+          </el-form-item>
+          <el-form-item label="账号类型">
+            <el-select v-model="changeUser.userType" placeholder="账号类型">
+              <el-option label="超级管理员" value="超级管理员" />
+              <el-option label="工作人员" value="工作人员" />
+              <el-option label="指挥人员" value="指挥人员" />
+              <el-option label="专家人员" value="专家人员" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="账号状态">
+            <el-select v-model="changeUser.status" placeholder="账号状态">
+              <el-option label="正常" value="正常" />
+              <el-option label="停用" value="停用" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="openModifyDialog = false">取 消</el-button>
         <el-button type="primary" @click="modifyUser">确 定</el-button>
@@ -194,6 +259,18 @@ export default {
         ID: '',
         username: '',
         password: '',
+        confirm: '',
+        name: '',
+        sex: '',
+        birthday: '',
+        userType: '',
+        status: '正常'
+      },
+      changeUser: {
+        ID: '',
+        username: '张三',
+        oldPassword: '123456',
+        newPassword: '',
         confirm: '',
         name: '',
         sex: '',
