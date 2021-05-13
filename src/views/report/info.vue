@@ -50,13 +50,9 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="1" :offset="3"   >
+          <el-col :span="6">
             <el-form-item >
               <el-button type="primary" size="small" @click="onSubmit">查询</el-button>
-            </el-form-item>
-          </el-col>
-          <el-col :span="1"   >
-            <el-form-item >
               <el-button  size="small" @click="onSubmit">重置</el-button>
             </el-form-item>
           </el-col>
