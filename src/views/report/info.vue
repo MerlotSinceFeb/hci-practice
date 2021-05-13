@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-form  :label-position="left" label-width="auto" :inline="true" :model="queryFrom" size="small" text-align-last: justify class="demo-form-inline">
+      <el-form  :label-position="left" label-width="auto" :model="queryFrom" size="small" text-align-last: justify class="demo-form-inline">
         <el-row :gutter="10">
           <el-col :span="6">
             <el-form-item  label="接报ID:  ">
@@ -50,13 +50,9 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="1" :offset="3"   >
+          <el-col :span="6">
             <el-form-item >
               <el-button type="primary" size="small" @click="onSubmit">查询</el-button>
-            </el-form-item>
-          </el-col>
-          <el-col :span="1"   >
-            <el-form-item >
               <el-button  size="small" @click="onSubmit">重置</el-button>
             </el-form-item>
           </el-col>
