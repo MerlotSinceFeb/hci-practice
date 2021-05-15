@@ -59,6 +59,11 @@
         </el-row>
       </el-form>
     </div>
+    <div class="base-option">
+      <el-row class="custom-row">
+        <el-button type="primary"  @click="addReport = true">新增</el-button>
+    </el-row>
+    </div>
     <el-table
     :data="tableData"
     stripe
@@ -66,7 +71,8 @@
     <el-table-column
       fixed
       prop="ID"
-      label="ID">
+      label="ID"
+      width="40px">
     </el-table-column>
     <el-table-column
       prop="eventName"
@@ -78,15 +84,21 @@
     </el-table-column>
     <el-table-column
       prop="code"
-      label="代码">
+      label="代码"
+      width="50px"
+      >
     </el-table-column>
     <el-table-column
       prop="proccessID"
-      label="流程编号">
+      label="流程编号"
+      width="100px"
+      >
     </el-table-column>
     <el-table-column
       prop="callMan"
-      label="报警人">
+      label="报警人"
+      width="70px"
+      >
     </el-table-column>
     <el-table-column
       prop="callManPhone"
@@ -114,27 +126,122 @@
     </el-table-column>
     <el-table-column
       prop="status"
-      label="状态">
+      label="状态"
+      width="80px"
+      >
     </el-table-column>
     <el-table-column
       fixed="right"
       prop="option"
-      label="操作">
+      label="操作"
+      width="110px"
+      align ="middle"
+      >
+      <template slot-scope="scope">
+        <el-button @click="handleClick(scope.row)" type="text" size="medium">编辑</el-button>
+        <el-divider direction="vertical"></el-divider>
+        <el-button  style="color:red" type="text" size="medium">删除</el-button>
+      </template>
     </el-table-column>
-
   </el-table>
+  <div class="add-window">
+  <el-dialog
+  title="新增接报"
+  :visible.sync="addReport"
+  width="50%">
+<el-form     :rules="rules"  :model="newReport" label-width="auto">
+  <el-form-item label="事件名称:" prop="eventName">
+    <el-input v-model="newReport.eventName" ></el-input>
+  </el-form-item>
+    <el-form-item label="风险企业ID:" prop="EnterpriseID">
+    <el-input v-model="newReport.EnterpriseID" ></el-input>
+  </el-form-item>
+    <el-form-item label="代码:" prop="code">
+    <el-input v-model="newReport.code" ></el-input>
+  </el-form-item>
+    <el-form-item label="流程ID:" prop="proccessID">
+    <el-input v-model="newReport.proccessID" ></el-input>
+  </el-form-item>
+    <el-form-item label="报警人:" prop="callMan">
+    <el-input v-model="newReport.callMan" ></el-input>
+  </el-form-item>
+    <el-form-item label="报警人联系方式:" prop="callManPhone">
+    <el-input v-model="newReport.callManPhone" ></el-input>
+  </el-form-item>
+    <el-form-item label="接报日期:"  prop="reportTime">
+    <el-date-picker
+      v-model="newReport.reportTime"
+      type="date"
+      placeholder="选择日期"
+      value-format="yyyy-MM-dd"
+      >
+    </el-date-picker>
+  </el-form-item>
+  <el-divider></el-divider>
+  <el-form-item label="操作人员:">
+    <span>{{ UserInfo.username }}</span>
+  </el-form-item>
+  <el-form-item label="创建时间:">
+    <span>{{ currentTime }}</span>
+            <el-divider direction="vertical"></el-divider>
+    <el-button type="primary" @click="generateTime">获取时间</el-button>
+  </el-form-item>
+</el-form>
+  <span slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="submitNewReport">确 定</el-button>
+    <el-button @click="addReport = false">取 消</el-button>
+  </span>
+</el-dialog>
   </div>
-
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      currentTime: "",
+      UserInfo: {
+        username: "李四"
+      },
+      addReport: false,
       queryForm: {
         eventName: '',
         region: ''
       },
+      newReport: {
+        eventName: '',
+        EnterpriseID: '',
+        code: '',
+        proccessID: '',
+        callMan: '',
+        reportTime: '',
+        callManPhone: ''
+      },
+      rules: {
+          eventName: [
+          { required: true, message: '请输入活动名称', trigger: 'blur' },
+          { min: 1, max:16, message: '长度在16 个字符以内', trigger: 'blur' }
+        ],
+        EnterpriseID: [
+          { required: true,  message: '请输入合法的企业ID', trigger: 'blur' }
+        ],
+        code: [
+          { required: true,  message: '请输入合法的编码', trigger: 'blur' }
+        ],
+        proccessID: [
+          { required: true, message: '请输入合法的流程ID', trigger: 'blur' }
+        ],
+        callMan: [
+          { required: true, message: '请输入报警人', trigger: 'blur' },
+        ],
+        reportTime: [
+          { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+        ],
+        callManPhone: [
+          { required: true, message: '请输入报警人联系方式', trigger: 'blur' },
+          { min: 1, max:16, message: '请输入合法的联系方式', trigger: 'blur' }
+          ]},
       tableData: [{
         ID: '1',
         eventName: '事件1',
@@ -143,16 +250,81 @@ export default {
         proccessID: '1',
         callMan: '甲',
         callManPhone: '13756474658',
-        reportTime: '2016-9-21',
+        reportTime: '2016-9-20',
         proccessCreater: '办事员A',
         proccessCreateDate: '2016-9-21',
         lastModifyer: '办事员A',
         lastModifyDate: '2016-9-21',
         status: '审批中',
-        option: ''
       }]
     }
+  },
+methods: {
+  generateTime(){
+    this.currentTime=this.getFormatDate();
+  },
+  getFormatDate() {
+	var date = new Date();
+	var seperator = "-";
+	var year = date.getFullYear();
+	var month = date.getMonth() + 1;
+	var nowDate = date.getDate();
+	if(month >=1 && month <=9) {
+		month = "0" + month;
+	}
+	if(nowDate >=0 && nowDate <=9) {
+		nowDate = "0" + nowDate;
+	}
+	var newDate = year + seperator + month + seperator + nowDate;
+	return newDate;
+},
+  getNewID(){
+    let newID = 0;
+    for(var i = 0;i < this.tableData.length;i++){
+      newID = Math.max(parseInt(this.tableData[i].ID),newID);
+    }
+    return newID+1;
+  },
+  submitNewReport(){
+
+    this.tableData.push({
+        ID: this.getNewID(),
+        eventName: this.newReport.eventName,
+        EnterpriseID: this.newReport.EnterpriseID,
+        code: this.newReport.code,
+        proccessID: this.newReport.proccessID,
+        callMan: this.newReport.callMan,
+        callManPhone: this.newReport.callManPhone,
+        reportTime: this.newReport.reportTime,
+        proccessCreater: this.UserInfo.username,
+        proccessCreateDate: this.currentTime,
+        lastModifyer: this.UserInfo.username,
+        lastModifyDate: this.currentTime,
+        status: '审批中',
+    });
+    this.newReportRefresh();
+    this.$message({
+          showClose: true,
+          message: '太棒了，接报重于TMD建立成功了！！！',
+          type: 'success'
+        });
+    this.addReport = false;
+  },
+  newReportRefresh(){
+    this.newReport= {
+        eventName: '',
+        EnterpriseID: '',
+        code: '',
+        proccessID: '',
+        callMan: '',
+        callManPhone: '',
+        reportTime: ''
+      }
+    this.currentTime="";
   }
+}
+
+  
 }
 </script>
 <style>
