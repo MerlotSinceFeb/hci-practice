@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="app-container">
     <div class="filter-container">
