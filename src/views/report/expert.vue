@@ -439,6 +439,7 @@ methods: {
     this.tableData[this.currentIndex].status="已通过";
     this.tableData[this.currentIndex].lastModifyDate=this.currentTime;
     this.tableData[this.currentIndex].lastModifyer=this.UserInfo.username;
+    this.textarea='';
           this.$message({
             type: 'success',
             message: '操作成功!'
@@ -453,6 +454,7 @@ methods: {
   },
   judgeReportCancel(){
     this.judgeReport=false;
+        this.textarea='';
   },
   judgeReportDeny(){
         this.$confirm('接报流程将被驳回', '提示', {
@@ -464,6 +466,7 @@ methods: {
         this.tableData[this.currentIndex].status="已驳回";
             this.tableData[this.currentIndex].lastModifyDate=this.currentTime;
     this.tableData[this.currentIndex].lastModifyer=this.UserInfo.username;
+        this.textarea='';
           this.$message({
             type: 'success',
             message: '操作成功!'
@@ -486,6 +489,7 @@ methods: {
     this.tableData[this.currentIndex].status="专家介入";
         this.tableData[this.currentIndex].lastModifyDate=this.currentTime;
     this.tableData[this.currentIndex].lastModifyer=this.UserInfo.username;
+        this.textarea='';
           this.$message({
             type: 'success',
             message: '操作成功!'

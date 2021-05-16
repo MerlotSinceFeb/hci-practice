@@ -141,7 +141,7 @@
       align ="middle"
       >
       <template slot-scope="scope">
-        <el-button @click="handleClick(scope.$index,scope.row)" type="text" size="medium">编辑</el-button>
+        <el-button @click="handleClick(scope.$index,scope.row)" type="text" size="medium">查看</el-button>
         <el-divider direction="vertical"></el-divider>
         <el-button  style="color:red" type="text" size="medium" @click="handleDelete(scope.$index,scope.row)" >删除</el-button>
       </template>
@@ -196,6 +196,43 @@
   </span>
 </el-dialog>
   </div>
+
+<el-dialog title="接报信息" :visible.sync="dialogFormVisible">
+<el-form       :model="reportinfo" label-width="auto">
+  <el-form-item label="事件名称:" prop="eventName">
+    <span>{{reportinfo.eventName}}</span>
+  </el-form-item>
+    <el-form-item label="风险企业ID:" prop="EnterpriseID">
+    <span>{{reportinfo.EnterpriseID}}</span>
+  </el-form-item>
+    <el-form-item label="代码:" prop="code">
+    <span>{{reportinfo.code}}</span>
+  </el-form-item>
+    <el-form-item label="流程ID:" prop="proccessID">
+    <span>{{reportinfo.proccessID}}</span>
+  </el-form-item>
+    <el-form-item label="报警人:" prop="callMan">
+    <span>{{reportinfo.callMan}}</span>
+  </el-form-item>
+    <el-form-item label="报警人联系方式:" prop="callManPhone">
+    <span>{{reportinfo.callManPhone}}</span>
+  </el-form-item>
+    <el-form-item label="接报日期:"  prop="reportTime">
+    <span>{{reportinfo.reportTime}}</span>
+  </el-form-item>
+  <el-divider></el-divider>
+  <el-form-item label="操作人员:">
+    <span>{{ UserInfo.username }}</span>
+  </el-form-item>
+  <el-form-item label="创建时间:">
+    <span>{{reportinfo.proccessCreateDate}}</span>
+  </el-form-item>
+</el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+  </div>
+</el-dialog>
   </div>
 </template>
 
@@ -204,6 +241,8 @@ import { getList } from '@/api/table';
 export default {
   data() {
     return {
+      dialogFormVisible: false,
+      reportinfo: {},
       loading: true,
       currentTime: "",
       UserInfo: {
@@ -375,6 +414,8 @@ methods: {
       }
   },
   handleClick(index,row){
+    this.dialogFormVisible = true
+    this.reportinfo=this.tableData[index];
     console.log(index,row);
   },
   handleDelete(index,row){
