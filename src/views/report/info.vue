@@ -1,8 +1,7 @@
-<<<<<<< HEAD
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-form  :label-position="left" label-width="auto" :model="queryFrom" size="small" text-align-last: justify class="demo-form-inline">
+      <el-form  :label-position="left" label-width="auto" :model="queryForm" size="small" text-align-last: justify class="demo-form-inline">
         <el-row :gutter="10">
           <el-col :span="6">
             <el-form-item  label="接报ID:  ">
@@ -11,22 +10,23 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label=" 流程编号:">
-              <el-input v-model="queryForm.eventName"  size="small" placeholder="请输入"></el-input>
+              <el-input v-model="queryForm.proccessID"  size="small" placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="流程创建日期:">
               <el-date-picker
-                v-model="value1"
+                v-model="queryForm.proccessCreateDate"
                 type="date"
                 size="small"
+                value-format="yyyy-MM-dd"
                 placeholder="选择日期">
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="状态:">
-              <el-input v-model="queryForm.eventName"  size="small" placeholder="请输入"></el-input>
+              <el-input v-model="queryForm.status"  size="small" placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -38,23 +38,24 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="流程创建者:">
-              <el-input v-model="queryForm.eventName" size="small"  placeholder="请输入"></el-input>
+              <el-input v-model="queryForm.proccessCreater" size="small"  placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="最后更新日期:">
               <el-date-picker
-                v-model="value1"
+                v-model="queryForm.lastModifyDate"
                 type="date"
                 size="small"
+                value-format="yyyy-MM-dd"
                 placeholder="选择日期">
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item >
-              <el-button type="primary" size="small" @click="onSubmit">查询</el-button>
-              <el-button  size="small" @click="onSubmit">重置</el-button>
+              <el-button type="primary" size="small" @click="query">查询</el-button>
+              <el-button  size="small" @click="refreshQuery">重置</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -66,6 +67,7 @@
     </el-row>
     </div>
     <el-table
+    v-loading="loading"
     :data="tableData"
     stripe
     style="width: 100%">
@@ -139,9 +141,9 @@
       align ="middle"
       >
       <template slot-scope="scope">
-        <el-button @click="handleClick(scope.row)" type="text" size="medium">编辑</el-button>
+        <el-button @click="handleClick(scope.$index,scope.row)" type="text" size="medium">查看</el-button>
         <el-divider direction="vertical"></el-divider>
-        <el-button  style="color:red" type="text" size="medium">删除</el-button>
+        <el-button  style="color:red" type="text" size="medium" @click="handleDelete(scope.$index,scope.row)" >删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -194,13 +196,54 @@
   </span>
 </el-dialog>
   </div>
+
+<el-dialog title="接报信息" :visible.sync="dialogFormVisible">
+<el-form       :model="reportinfo" label-width="auto">
+  <el-form-item label="事件名称:" prop="eventName">
+    <span>{{reportinfo.eventName}}</span>
+  </el-form-item>
+    <el-form-item label="风险企业ID:" prop="EnterpriseID">
+    <span>{{reportinfo.EnterpriseID}}</span>
+  </el-form-item>
+    <el-form-item label="代码:" prop="code">
+    <span>{{reportinfo.code}}</span>
+  </el-form-item>
+    <el-form-item label="流程ID:" prop="proccessID">
+    <span>{{reportinfo.proccessID}}</span>
+  </el-form-item>
+    <el-form-item label="报警人:" prop="callMan">
+    <span>{{reportinfo.callMan}}</span>
+  </el-form-item>
+    <el-form-item label="报警人联系方式:" prop="callManPhone">
+    <span>{{reportinfo.callManPhone}}</span>
+  </el-form-item>
+    <el-form-item label="接报日期:"  prop="reportTime">
+    <span>{{reportinfo.reportTime}}</span>
+  </el-form-item>
+  <el-divider></el-divider>
+  <el-form-item label="操作人员:">
+    <span>{{ UserInfo.username }}</span>
+  </el-form-item>
+  <el-form-item label="创建时间:">
+    <span>{{reportinfo.proccessCreateDate}}</span>
+  </el-form-item>
+</el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+  </div>
+</el-dialog>
   </div>
 </template>
 
 <script>
+import { getList } from '@/api/table';
 export default {
   data() {
     return {
+      dialogFormVisible: false,
+      reportinfo: {},
+      loading: true,
       currentTime: "",
       UserInfo: {
         username: "李四"
@@ -208,7 +251,11 @@ export default {
       addReport: false,
       queryForm: {
         eventName: '',
-        region: ''
+        ID: '',
+        proccessID: '',
+        proccessCreateDate: '',
+        lastModifyDate: '',
+        proccessCreater: ''
       },
       newReport: {
         eventName: '',
@@ -260,6 +307,9 @@ export default {
       }]
     }
   },
+  created(){
+    this.getList();
+  },
 methods: {
   generateTime(){
     this.currentTime=this.getFormatDate();
@@ -306,7 +356,7 @@ methods: {
     this.newReportRefresh();
     this.$message({
           showClose: true,
-          message: '太棒了，接报重于TMD建立成功了！！！',
+          message: '接报创建成功',
           type: 'success'
         });
     this.addReport = false;
@@ -322,11 +372,56 @@ methods: {
         reportTime: ''
       }
     this.currentTime="";
+  },
+  randomList(num){
+    this.tableData=[];
+    for( var i = 0; i < num; i++){
+      this.tableData.push({
+        ID: this.getNewID(),
+        eventName: '接报事件' + Math.round(Math.random()*80+20),
+        EnterpriseID: Math.round(Math.random()*80+20),
+        code: Math.round(Math.random()*80+20),
+        proccessID: Math.round(Math.random()*80+20),
+        callMan: '市民'+Math.round(Math.random()*10),
+        callManPhone: '137564746'+Math.round(Math.random()*80+19),
+        reportTime: '2016-9-20',
+        proccessCreater: this.UserInfo.username,
+        proccessCreateDate: '2016-9-21',
+        lastModifyer: this.UserInfo.username,
+        lastModifyDate: '2016-9-21',
+        status: '审批中',
+      });
+    }
+  },
+  getList(){
+    this.loading=true;
+    this.randomList(10);
+    this.loading=false;
+  },
+  query(){
+    this.loading=true;
+    this.randomList(5);
+    this.loading=false;
+  },
+  refreshQuery(){
+    this.queryForm= {
+        eventName: '',
+        ID: '',
+        proccessID: '',
+        proccessCreateDate: '',
+        lastModifyDate: '',
+        proccessCreater: ''
+      }
+  },
+  handleClick(index,row){
+    this.dialogFormVisible = true
+    this.reportinfo=this.tableData[index];
+    console.log(index,row);
+  },
+  handleDelete(index,row){
+    this.tableData.splice(index,1);
   }
-}
-
-  
-}
+}}
 </script>
 <style>
 </style>
