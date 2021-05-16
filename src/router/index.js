@@ -231,17 +231,7 @@ export const asyncRoutes = [
         name: 'report_monitor',
         component: () => import('@/views/report/monitor'),
         meta: {
-          title: '指挥人员接报审批',
-          icon: 'el-icon-menu',
-          roles: ['monitor']
-        }
-      },
-      {
-        path: 'urgent',
-        name: 'report_urgent',
-        component: () => import('@/views/report/urgent'),
-        meta: {
-          title: '紧急事件处理',
+          title: '指挥人员接报维护',
           icon: 'el-icon-menu',
           roles: ['monitor']
         }
@@ -251,7 +241,7 @@ export const asyncRoutes = [
         name: 'report_expert',
         component: () => import('@/views/report/expert'),
         meta: {
-          title: '专家人员接报审批',
+          title: '专家人员接报维护',
           icon: 'el-icon-menu',
           roles: ['expert']
         }
