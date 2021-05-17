@@ -180,7 +180,7 @@ $light_gray: #eee;
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-image: url("~@/assets/img/bg_image.png");
+  background-image: url("~@/assets/img/bg_image.jpg");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-attachment: fixed;

@@ -20,7 +20,7 @@
               type="selection"
             />
             <el-table-column
-              type="ID"
+              prop="ID"
               label="ID"
               width="50px"
             />
@@ -58,12 +58,10 @@
           <div style="text-align: center">
             <el-pagination
               background
-              layout="total, sizes, prev, pager, next, jumper"
+              layout="prev, pager, next, jumper, ->, total"
               :current-page="currentPage"
-              :page-sizes="[1, 2, 3, 4]"
               :page-size="1"
               :total="total"
-              @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
             />
           </div>
@@ -82,17 +80,17 @@
           <el-row>
             <el-col :span="6">
               <el-form-item label="ID">
-                <el-input v-model="account.ID" placeholder="ID"/>
+                <el-input v-model="account.ID" placeholder="ID" />
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="账号">
-                <el-input v-model="account.username" placeholder="账号"/>
+                <el-input v-model="account.username" placeholder="账号" />
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="姓名">
-                <el-input v-model="account.name" placeholder="姓名"/>
+                <el-input v-model="account.name" placeholder="姓名" />
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -106,18 +104,18 @@
             <el-col :span="6">
               <el-form-item label="账号类型">
                 <el-select v-model="account.userType" placeholder="账号类型">
-                  <el-option label="超级管理员" value="超级管理员"/>
-                  <el-option label="工作人员" value="工作人员"/>
-                  <el-option label="指挥人员" value="指挥人员"/>
-                  <el-option label="专家人员" value="专家人员"/>
+                  <el-option label="超级管理员" value="超级管理员" />
+                  <el-option label="工作人员" value="工作人员" />
+                  <el-option label="指挥人员" value="指挥人员" />
+                  <el-option label="专家人员" value="专家人员" />
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="账号状态">
                 <el-select v-model="account.status" placeholder="账号状态">
-                  <el-option label="正常" value="正常"/>
-                  <el-option label="停用" value="停用"/>
+                  <el-option label="正常" value="正常" />
+                  <el-option label="停用" value="停用" />
                 </el-select>
               </el-form-item>
             </el-col>
@@ -156,16 +154,16 @@
           :rules="rules"
         >
           <el-form-item label="账号" prop="username">
-            <el-input v-model="newUser.username" placeholder="请输入账号"/>
+            <el-input v-model="newUser.username" placeholder="请输入账号" />
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input v-model="newUser.password" type="password" auto-complete="off" placeholder="请输入密码"/>
+            <el-input v-model="newUser.password" type="password" auto-complete="off" placeholder="请输入密码" />
           </el-form-item>
           <el-form-item label="确认密码" prop="confirmPassword">
-            <el-input v-model="newUser.confirm" type="password" auto-complete="off" placeholder="请再次确认密码"/>
+            <el-input v-model="newUser.confirm" type="password" auto-complete="off" placeholder="请再次确认密码" />
           </el-form-item>
           <el-form-item label="姓名" prop="name">
-            <el-input v-model="newUser.name" placeholder="请输入姓名"/>
+            <el-input v-model="newUser.name" placeholder="请输入姓名" />
           </el-form-item>
           <el-form-item label="性别" prop="sex">
             <el-radio v-model="newUser.sex" label="男">男</el-radio>
@@ -181,10 +179,10 @@
           </el-form-item>
           <el-form-item label="账号类型" prop="userType">
             <el-select v-model="newUser.userType" placeholder="账号类型">
-              <el-option label="超级管理员" value="超级管理员"/>
-              <el-option label="工作人员" value="工作人员"/>
-              <el-option label="指挥人员" value="指挥人员"/>
-              <el-option label="专家人员" value="专家人员"/>
+              <el-option label="超级管理员" value="超级管理员" />
+              <el-option label="工作人员" value="工作人员" />
+              <el-option label="指挥人员" value="指挥人员" />
+              <el-option label="专家人员" value="专家人员" />
             </el-select>
           </el-form-item>
         </el-form>
@@ -209,19 +207,19 @@
           :rules="rules"
         >
           <el-form-item label="用户账号">
-            <el-input v-model="changeUser.username" placeholder="请输入姓名" disabled/>
+            <el-input v-model="changeUser.username" placeholder="请输入姓名" disabled />
           </el-form-item>
           <el-form-item label="当前密码">
-            <el-input v-model="changeUser.oldPassword" type="password" auto-complete="off" disabled/>
+            <el-input v-model="changeUser.oldPassword" type="password" auto-complete="off" disabled />
           </el-form-item>
           <el-form-item label="新密码" prop="newPassword">
-            <el-input v-model="changeUser.newPassword" type="password" auto-complete="off" placeholder="请输入新密码"/>
+            <el-input v-model="changeUser.newPassword" type="password" auto-complete="off" placeholder="请输入新密码" />
           </el-form-item>
           <el-form-item label="再次确认" prop="confirmNewPassword">
-            <el-input v-model="changeUser.confirm" type="password" auto-complete="off" placeholder="请再次确认新密码"/>
+            <el-input v-model="changeUser.confirm" type="password" auto-complete="off" placeholder="请再次确认新密码" />
           </el-form-item>
           <el-form-item label="姓名" prop="name">
-            <el-input v-model="changeUser.name" placeholder="请输入姓名"/>
+            <el-input v-model="changeUser.name" placeholder="请输入姓名" />
           </el-form-item>
           <el-form-item label="性别">
             <el-radio v-model="changeUser.sex" label="男">男</el-radio>
@@ -237,16 +235,16 @@
           </el-form-item>
           <el-form-item label="账号类型">
             <el-select v-model="changeUser.userType" placeholder="账号类型">
-              <el-option label="超级管理员" value="超级管理员"/>
-              <el-option label="工作人员" value="工作人员"/>
-              <el-option label="指挥人员" value="指挥人员"/>
-              <el-option label="专家人员" value="专家人员"/>
+              <el-option label="超级管理员" value="超级管理员" />
+              <el-option label="工作人员" value="工作人员" />
+              <el-option label="指挥人员" value="指挥人员" />
+              <el-option label="专家人员" value="专家人员" />
             </el-select>
           </el-form-item>
           <el-form-item label="账号状态">
             <el-select v-model="changeUser.status" placeholder="账号状态">
-              <el-option label="正常" value="正常"/>
-              <el-option label="停用" value="停用"/>
+              <el-option label="正常" value="正常" />
+              <el-option label="停用" value="停用" />
             </el-select>
           </el-form-item>
         </el-form>
@@ -488,7 +486,8 @@ export default {
   methods: {
     handleSizeChange(val) {
       this.pageSize = val
-      this.userList = this.rawUserList
+      console.log(this.pageSize, this.userList.length, this.currentPage)
+      this.currentPage = 1
       this.total = Math.ceil(this.userList.length / this.pageSize)
     },
     handleCurrentChange(val) {
@@ -541,15 +540,17 @@ export default {
         // 禁用创建按钮
         this.createUserBtnIsDisable = true
         // 补充默认信息
-        this.rawUser.ID = String(this.userList.length + 1)
-        this.rawUser.status = userInitStatus
-        this.rawUser.username = this.newUser.username
-        this.rawUser.password = this.newUser.password
-        this.rawUser.name = this.newUser.name
-        this.rawUser.sex = this.newUser.sex
-        this.rawUser.birthday = this.newUser.birthday
-        this.rawUser.userType = this.newUser.userType
-        this.rawUserList.push(this.rawUser)
+        const id = this.rawUserList[this.rawUserList.length - 1].ID
+        this.rawUserList.push({
+          ID: String(parseInt(id) + 1),
+          status: userInitStatus,
+          username: this.newUser.username,
+          password: this.newUser.password,
+          name: this.newUser.name,
+          sex: this.newUser.sex,
+          birthday: this.newUser.birthday,
+          userType: this.newUser.userType
+        })
         this.userList = this.rawUserList
         this.total = Math.ceil(this.userList.length / this.pageSize)
 
@@ -654,6 +655,14 @@ export default {
           this.rawUserList = this.userList.filter(user => {
             return user.ID !== removeUser.ID
           })
+        })
+        this.rawUserList = this.rawUserList.filter(user => {
+          for (let i = 0; i < this.multipleSelection.length; i++) {
+            if (this.multipleSelection[i].ID === user.ID) {
+              return false
+            }
+          }
+          return true
         })
         // 设置列表页数据
         this.userList = this.rawUserList
