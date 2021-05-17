@@ -10,18 +10,18 @@
         <el-row class="custom-row">
           <el-table
             ref="multipleTable"
-            :data="userList"
+            :data="userList.slice((currentPage - 1)*pageSize, currentPage*pageSize)"
             tooltip-effect="dark"
             border
-            height="340"
+            height="285"
             @selection-change="handleSelectionChange"
           >
             <el-table-column
               type="selection"
             />
             <el-table-column
-              type="index"
-              label="序号"
+              type="ID"
+              label="ID"
               width="50px"
             />
             <el-table-column
@@ -58,8 +58,13 @@
           <div style="text-align: center">
             <el-pagination
               background
-              layout="prev, pager, next"
-              :total="1000"
+              layout="total, sizes, prev, pager, next, jumper"
+              :current-page="currentPage"
+              :page-sizes="[1, 2, 3, 4]"
+              :page-size="1"
+              :total="total"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
             />
           </div>
         </el-row>
@@ -258,6 +263,9 @@
 export default {
   data() {
     return {
+      pageSize: 5,
+      currentPage: 1,
+      total: 0,
       createUserBtnIsDisable: false,
       modifyUserBtnIsDisable: false,
       newUser: {
@@ -474,23 +482,40 @@ export default {
       }
     }
   },
-
+  mounted() {
+    this.total = Math.ceil(this.userList.length / this.pageSize)
+  },
   methods: {
+    handleSizeChange(val) {
+      this.pageSize = val
+      this.userList = this.rawUserList
+      this.total = Math.ceil(this.userList.length / this.pageSize)
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val
     },
     searchUser() {
       // 遍历userList列表找到符合条件的记录
       this.userList = this.rawUserList.filter(user => {
-        return this.account.ID === user.ID || this.account.username === user.username ||
-          this.account.status === user.status || this.account.userType === user.userType ||
-          this.account.birthday === user.birthday || this.account.sex === user.sex ||
-          this.account.name === user.name
+        return (this.account.ID === user.ID || this.account.ID.trim() === '') &&
+          (this.account.username === user.username || this.account.username.trim() === '') &&
+          (this.account.status === user.status || this.account.status.trim() === '') &&
+          (this.account.userType === user.userType || this.account.username.trim() === '') &&
+          (this.account.birthday === user.birthday || this.account.birthday.trim() === '') &&
+          (this.account.sex === user.sex || this.account.sex.trim() === '') &&
+          (this.account.name === user.name || this.account.name.trim() === '')
       })
+      this.total = Math.ceil(this.userList.length / this.pageSize)
+      this.currentPage = 1
     },
     resetUserList() {
       // 重置列表页数据
       this.userList = this.rawUserList
+      this.total = Math.ceil(this.userList.length / this.pageSize)
+      this.currentPage = 1
       // 清空查询表单数据
       this.account.birthday = ''
       this.account.name = ''
@@ -524,7 +549,9 @@ export default {
         this.rawUser.sex = this.newUser.sex
         this.rawUser.birthday = this.newUser.birthday
         this.rawUser.userType = this.newUser.userType
-        this.userList.push(this.rawUser)
+        this.rawUserList.push(this.rawUser)
+        this.userList = this.rawUserList
+        this.total = Math.ceil(this.userList.length / this.pageSize)
 
         // 还原控件状态
         this.openCreateDialog = false
@@ -630,6 +657,8 @@ export default {
         })
         // 设置列表页数据
         this.userList = this.rawUserList
+        this.currentPage = 1
+        this.total = Math.ceil(this.userList.length / this.pageSize)
         this.$message({
           type: 'success',
           message: '删除成功!'
