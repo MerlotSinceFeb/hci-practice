@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" style="margin-left:20px">物资基本信息维护页
+  <div class="app-container" style="margin-left:20px">
     <div class="filter-container" style="margin-top:20px">
       <el-button type="primary" size="small" icon="el-icon-plus" @click="dialogFormVisible=true">新增物资基本信息</el-button>
     </div>
@@ -100,13 +100,15 @@
             icon="el-icon-edit"
             type="text"
             @click="handleClick(scope.row)">{{ scope.row.isEdit ? '完成' : '编辑' }}</el-button>
-          <el-button
+          <el-popconfirm title="确认删除吗？" @onConfirm="deleteRow(scope.$index, tableData)">
+            <el-button
             size="mini"
             icon="el-icon-delete"
+            slot="reference"
             type="text"
             style="color:red"
-            @click.native.prevent="deleteRow(scope.$index, tableData)"
-            @click="deleteSuccess()">删除</el-button>
+            >删除</el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -133,8 +135,8 @@
         </el-form-item>
         <el-form-item label="物资类型" :label-width="formLabelWidth" prop="type">
           <el-select v-model="form.type" placeholder="请选择物资类型">
-            <el-option label="食品" value="food"/>
-            <el-option label="器械" value="equipment"/>
+            <el-option label="食品" value="食品"/>
+            <el-option label="器械" value="器械"/>
           </el-select>
         </el-form-item>
         <el-form-item label="物资编号" :label-width="formLabelWidth" prop="code">
@@ -191,11 +193,47 @@ export default {
       }, {
         ID: '3',
         name: '铁锹',
-        quantity: '50',
+        quantity: '100',
         type: '器械',
         checker: '李四',
         checkerPhone: '12345687',
         code: '141',
+        date: '2021-05-11'
+      }, {
+        ID: '4',
+        name: '十字镐',
+        quantity: '56',
+        type: '器械',
+        checker: '李四',
+        checkerPhone: '12345687',
+        code: '142',
+        date: '2021-05-11'
+      }, {
+        ID: '5',
+        name: '钻头',
+        quantity: '70',
+        type: '器械',
+        checker: '李四',
+        checkerPhone: '12345687',
+        code: '143',
+        date: '2021-05-11'
+      }, {
+        ID: '6',
+        name: '炸药',
+        quantity: '84',
+        type: '器械',
+        checker: '李四',
+        checkerPhone: '12345687',
+        code: '144',
+        date: '2021-05-11'
+      }, {
+        ID: '7',
+        name: '干粮',
+        quantity: '106',
+        type: '食品',
+        checker: '李四',
+        checkerPhone: '12345687',
+        code: '103',
         date: '2021-05-11'
       }],
       search: '',
@@ -214,6 +252,7 @@ export default {
   methods: {
     deleteRow(index, rows) {
       rows.splice(index, 1)
+      this.deleteSuccess()
     },
     deleteSuccess() {
       this.$message({

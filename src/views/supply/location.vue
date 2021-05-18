@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" style="margin-left:20px">物资位置信息维护页
+  <div class="app-container" style="margin-left:20px">
     <div class="filter-container" style="margin-top:20px">
       <el-button type="primary" size="small" icon="el-icon-plus" @click="dialogFormVisible=true">新增物资位置信息</el-button>
     </div>
@@ -56,13 +56,15 @@
             icon="el-icon-edit"
             type="text"
             @click="handleClick(scope.row)">{{ scope.row.isEdit ? '完成' : '编辑' }}</el-button>
-          <el-button
+          <el-popconfirm title="确认删除吗？" @onConfirm="deleteRow(scope.$index, tableData)">
+            <el-button
             size="mini"
             icon="el-icon-delete"
+            slot="reference"
             type="text"
             style="color:red"
-            @click.native.prevent="deleteRow(scope.$index, tableData)"
-            @click="deleteSuccess()">删除</el-button>
+            >删除</el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -112,6 +114,22 @@ export default {
         ID: '3',
         name: '武器',
         content: '步枪'
+      }, {
+        ID: '4',
+        name: '建材',
+        content: '混凝土'
+      }, {
+        ID: '5',
+        name: '一般车辆',
+        content: '汽车'
+      }, {
+        ID: '6',
+        name: '工程车辆',
+        content: '挖掘机、铲车'
+      }, {
+        ID: '7',
+        name: '化学品',
+        content: '化学原料'
       }],
       search: '',
       dialogFormVisible: false,
@@ -124,6 +142,7 @@ export default {
   methods: {
     deleteRow(index, rows) {
       rows.splice(index, 1)
+      this.deleteSuccess()
     },
     deleteSuccess() {
       this.$message({

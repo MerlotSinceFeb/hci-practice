@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" style="margin-left:20px">流程信息维护页
+  <div class="app-container" style="margin-left:20px">
     <div class="filter-container" style="margin-top:20px">
       <el-button type="primary" size="small" icon="el-icon-plus" @click="dialogFormVisible=true">新增流程信息</el-button>
     </div>
@@ -79,13 +79,15 @@
             icon="el-icon-edit"
             type="text"
             @click="handleClick(scope.row)">{{ scope.row.isEdit ? '完成' : '编辑' }}</el-button>
-          <el-button
+          <el-popconfirm title="确认删除吗？" @onConfirm="deleteRow(scope.$index, tableData)">
+            <el-button
             size="mini"
             icon="el-icon-delete"
+            slot="reference"
             type="text"
             style="color:red"
-            @click.native.prevent="deleteRow(scope.$index, tableData)"
-            @click="deleteSuccess()">删除</el-button>
+            >删除</el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -148,20 +150,38 @@ export default {
       }, {
         ID: '3',
         name: '模板三',
-        type: '自然灾害水旱灾害一级',
+        type: '自然灾害水旱灾害二级',
         typeCode: '000003',
         content: '测试'
       }, {
         ID: '4',
         name: '模板四',
-        type: '自然灾害水旱灾害一级',
+        type: '自然灾害水旱灾害二级',
         typeCode: '000004',
         content: '测试'
       }, {
         ID: '5',
         name: '模板五',
-        type: '自然灾害水旱灾害一级',
+        type: '事故灾难公交车侧翻一级',
         typeCode: '000005',
+        content: '测试'
+      }, {
+        ID: '6',
+        name: '模板六',
+        type: '事故灾难工人猝死一级',
+        typeCode: '000006',
+        content: '测试'
+      }, {
+        ID: '7',
+        name: '模板七',
+        type: '事故灾难工人猝死一级',
+        typeCode: '000007',
+        content: '测试'
+      }, {
+        ID: '8',
+        name: '模板八',
+        type: '公共卫生事件矿泉水污染一级',
+        typeCode: '000008',
         content: '测试'
       }],
       search: '',
@@ -177,6 +197,7 @@ export default {
   methods: {
     deleteRow(index, rows) {
       rows.splice(index, 1)
+      this.deleteSuccess()
     },
     deleteSuccess() {
       this.$message({
@@ -187,6 +208,12 @@ export default {
     addSuccess() {
       this.$message({
         message: '成功添加信息',
+        type: 'success'
+      })
+    },
+    editSuccess() {
+      this.$message({
+        message: '成功编辑信息',
         type: 'success'
       })
     },
@@ -214,6 +241,7 @@ export default {
     handleClick(row) {
       if (row.isEdit) {
         this.$delete(row, 'isEdit')
+        this.editSuccess()
       } else {
         this.$set(row, 'isEdit', true)
       }

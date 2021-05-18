@@ -1,7 +1,8 @@
 <template>
   <div class="app-container">
-    <div style="margin-top:20px">
-      <el-col :span="10">
+    <div style="margin-top:50px">
+      <el-row>
+        <el-col :span="10" offset="3">
         <div class="block" style="margin:20px">
           <el-tree
             :data="treeData"
@@ -25,31 +26,47 @@
                     style="margin-right:20px">
                     插入
                   </el-button>
-                  <el-button
-                    type="text"
-                    size="mini"
-                    icon="el-icon-delete"
-                    @click="() => remove(node, data)">
-                    删除
-                  </el-button>
+                  <el-popconfirm title="确认删除该节点？" @onConfirm="() => remove(node, data)">
+                    <el-button
+                      type="text"
+                      size="mini"
+                      slot="reference"
+                      icon="el-icon-delete">
+                      删除
+                    </el-button>
+                  </el-popconfirm>
                 </el-button-group>
               </span>
             </span>
           </el-tree>
         </div>
       </el-col>
-      <el-col :span="6" :offset="3">
-        <div class="block" style="margin:20px">
-          <el-row>
-            <el-row>选中灾难信息</el-row>
-            <el-input type="textarea" v-model="textarea1"></el-input>
-          </el-row>
-          <el-row style="margin-top:50px">
-            <el-row>选中备注</el-row>
-            <el-input type="textarea" v-model="textarea2"></el-input>
-          </el-row>
-        </div>
+      <el-col :span="6" :offset="1">
+        <el-card class="box-card" style="margin-top:20px;height:450px">
+          <div class="block" align="center">
+            <el-row style="margin-top:20px;font-size:18px;font-weight:550">事件信息查看</el-row>
+            <el-row style="margin-top:30px;font-size:16px;font-weight:500">
+              <el-row>选中灾难信息</el-row>
+              <el-input type="textarea" v-model="textarea1"></el-input>
+            </el-row>
+            <el-row style="margin-top:50px;font-size:16px;font-weight:500">
+              <el-row>选中备注</el-row>
+              <el-input type="textarea" :rows="6" v-model="textarea2"></el-input>
+            </el-row>
+          </div>
+        </el-card>
       </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="17" offset="3">
+          <el-card class="box-card">
+            <el-row style="font-size:14px">
+              <i class="el-icon-chat-line-round" style="margin-right:10px"/>
+              插入节点提示：一级节点为灾害类型，二级节点为灾害名称，三级节点为灾害等级
+            </el-row>
+          </el-card>
+        </el-col>
+      </el-row>
     </div>
 
     <el-dialog title="新增节点" :visible.sync="dialogFormVisible" style="width:1200px" @close="dialogFormClosed">
