@@ -418,9 +418,25 @@ methods: {
     this.reportinfo=this.tableData[index];
     console.log(index,row);
   },
-  handleDelete(index,row){
+handleDelete(index,row){
+          this.$confirm('该操作将删除接报', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
     this.tableData.splice(index,1);
-  }
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消操作'
+          });          
+        });
+
+  },  
 }}
 </script>
 <style>
