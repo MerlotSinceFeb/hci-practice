@@ -14,7 +14,7 @@
           width="30%"
           :visible.sync="centerDialogVisible"
           center
-          :show-close=false
+          :show-close="false"
         >
           <span>
             <el-form
@@ -44,9 +44,7 @@
             </el-form>
           </span>
           <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="handleNewCorp()"
-              >确 定</el-button
-            >
+            <el-button type="primary" @click="handleNewCorp()">确 定</el-button>
             <el-button @click="handleCancle()">取 消</el-button>
           </span>
         </el-dialog>
@@ -130,14 +128,19 @@
             @click="handleEdit(scope.$index, scope.row)"
             >{{ scope.row.isEdit ? "完成" : "编辑" }}
           </el-button>
-          <el-button
-            size="mini"
-            icon="el-icon-delete"
-            type="text"
-            style="color: red"
-            @click="handleDelete(scope.$index, scope.row)"
-            >删除</el-button
+          <el-popconfirm
+            title="确定删除吗？"
+            @onConfirm="handleDelete(scope.$index, scope.row)"
           >
+            <el-button
+              size="mini"
+              icon="el-icon-delete"
+              type="text"
+              style="color: red"
+              slot="reference"
+              >删除</el-button
+            >
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -203,6 +206,24 @@ export default {
           phone_number: "0412-6733309",
           type: "公办企业",
         },
+        {
+          ID: "5",
+          name: "渤海钻探",
+          address: "天津经济技术开发区第二大街83号",
+          detail_address: "117.725755,39.027752",
+          legal_entity: "刘光木",
+          phone_number: "022-25281919",
+          type: "公办企业",
+        },
+        {
+          ID: "6",
+          name: "长城特殊钢有限公司",
+          address: "四川省江油市江东路",
+          detail_address: "104.767539,31.769822",
+          legal_entity: "李赤波",
+          phone_number: "0816-3653409",
+          type: "公办企业",
+        },
       ],
       search: "",
       currentRow: null,
@@ -230,24 +251,24 @@ export default {
     handleDelete(index, rows) {
       this.tableData.splice(index, 1);
       this.$message({
-          message: '删除企业成功！',
-          type: 'success'
-        });
+        message: "删除企业成功！",
+        type: "success",
+      });
     },
-    handleCancle(){
+    handleCancle() {
       this.centerDialogVisible = false;
       this.clearForm();
     },
     handleNewCorp() {
       let newCorp = JSON.parse(JSON.stringify(this.form));
       this.getMaxID();
-      newCorp.ID = this.maxID+1;
+      newCorp.ID = this.maxID + 1;
       this.tableData.push(newCorp);
       this.centerDialogVisible = false;
-       this.$message({
-          message: '添加企业成功！',
-          type: 'success'
-        });
+      this.$message({
+        message: "添加企业成功！",
+        type: "success",
+      });
       this.clearForm();
     },
     getMaxID() {
@@ -257,17 +278,17 @@ export default {
       //   }
       // }
 
-      let idArr = this.tableData.map(el => el.ID);
+      let idArr = this.tableData.map((el) => el.ID);
       this.maxID = Math.max(...idArr);
     },
-    clearForm(){
-      this.form.name = '';
-      this.form.address = '';
-      this.form.detail_address = '';
-      this.form.legal_entity = '';
-      this.form.phone_number = '';
-      this.form.type = '';
-    }
+    clearForm() {
+      this.form.name = "";
+      this.form.address = "";
+      this.form.detail_address = "";
+      this.form.legal_entity = "";
+      this.form.phone_number = "";
+      this.form.type = "";
+    },
   },
 };
 </script>
