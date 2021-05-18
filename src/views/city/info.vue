@@ -167,14 +167,19 @@
             @click="handleEdit(scope.$index, scope.row)"
             >{{ scope.row.isEdit ? "完成" : "编辑" }}
           </el-button>
+          <el-popconfirm
+            title="确定删除吗？"
+            @onConfirm="handleDelete(scope.$index, scope.row)"
+            >
           <el-button
             size="mini"
             icon="el-icon-delete"
             type="text"
             style="color: red"
-            @click="handleDelete(scope.$index, scope.row)"
+            slot="reference"
             >删除</el-button
           >
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
