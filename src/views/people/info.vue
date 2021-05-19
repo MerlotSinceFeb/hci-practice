@@ -509,6 +509,17 @@ export default {
       })
       this.total = Math.ceil(this.userList.length / this.pageSize)
       this.currentPage = 1
+      if (this.userList.length === 0) {
+        this.$message({
+          type: 'warning',
+          message: '查询用户失败!'
+        })
+        return
+      }
+      this.$message({
+        type: 'success',
+        message: '查询用户成功!'
+      })
     },
     resetUserList() {
       // 重置列表页数据

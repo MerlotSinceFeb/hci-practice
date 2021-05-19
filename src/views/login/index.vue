@@ -140,7 +140,7 @@ $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
-    color: $cursor;
+    color: $light_gray;
   }
 }
 
@@ -153,13 +153,13 @@ $cursor: #fff;
 
     input {
       background: transparent;
-      border: 0px;
+      border: 1px solid;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
       color: $light_gray;
       height: 47px;
-      caret-color: $cursor;
+      caret-color: $light_gray;
     }
   }
 
