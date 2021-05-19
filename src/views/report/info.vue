@@ -157,13 +157,25 @@
     <el-input v-model="newReport.eventName" ></el-input>
   </el-form-item>
     <el-form-item label="风险企业ID:" prop="EnterpriseID">
-    <el-input v-model="newReport.EnterpriseID" ></el-input>
+  <el-autocomplete
+  v-model="newReport.EnterpriseID"
+  :fetch-suggestions="querySearchAsync1"
+  placeholder="请输入内容"
+></el-autocomplete>
   </el-form-item>
     <el-form-item label="代码:" prop="code">
-    <el-input v-model="newReport.code" ></el-input>
+    <el-autocomplete
+  v-model="newReport.code"
+  :fetch-suggestions="querySearchAsync2"
+  placeholder="请输入内容"
+></el-autocomplete>
   </el-form-item>
     <el-form-item label="流程ID:" prop="proccessID">
-    <el-input v-model="newReport.proccessID" ></el-input>
+    <el-autocomplete
+  v-model="newReport.proccessID"
+  :fetch-suggestions="querySearchAsync3"
+  placeholder="请输入内容"
+></el-autocomplete>
   </el-form-item>
     <el-form-item label="报警人:" prop="callMan">
     <el-input v-model="newReport.callMan" ></el-input>
@@ -241,6 +253,9 @@ import { getList } from '@/api/table';
 export default {
   data() {
     return {
+      suggest1: [],
+      suggest2: [],
+      suggest3: [],
       dialogFormVisible: false,
       reportinfo: {},
       loading: true,
@@ -309,6 +324,7 @@ export default {
   },
   created(){
     this.getList();
+    this.getSuggestion();
   },
 methods: {
   generateTime(){
@@ -437,6 +453,51 @@ handleDelete(index,row){
         });
 
   },  
+getSuggestion(){
+  for(var i = 0; i < 100;i++){
+    this.suggest1.push({
+      "value":i+''
+    });
+        this.suggest2.push({
+      "value":i+''
+    });
+        this.suggest3.push({
+      "value":i+''
+    });
+  }
+},
+      querySearchAsync1(queryString, cb) {
+        var suggestions = this.suggest1;
+        var results = queryString ? suggestions.filter(this.createStateFilter(queryString)) : suggestions;
+
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+          cb(results);
+        }, 1000* Math.random());
+      },
+          querySearchAsync2(queryString, cb) {
+        var suggestions = this.suggest2;
+        var results = queryString ? suggestions.filter(this.createStateFilter(queryString)) : suggestions;
+
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+          cb(results);
+        }, 1000* Math.random());
+      },
+          querySearchAsync3(queryString, cb) {
+        var suggestions = this.suggest3;
+        var results = queryString ? suggestions.filter(this.createStateFilter(queryString)) : suggestions;
+
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+          cb(results);
+        }, 1000* Math.random());
+      },
+      createStateFilter(queryString) {
+        return (state) => {
+          return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1);
+        };
+      },
 }}
 </script>
 <style>
