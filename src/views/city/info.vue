@@ -19,27 +19,28 @@
         >
           <span>
             <el-form
-              ref="form"
+              ref="cityForm"
               :model="cityForm"
               label-width="auto"
               label-position="left"
+              :rules="rules"
             >
-              <el-form-item label="城市名称">
+              <el-form-item label="城市名称" prop="name">
                 <el-input v-model="cityForm.name" style="width: 70%" />
               </el-form-item>
-              <el-form-item label="所属省份">
+              <el-form-item label="所属省份" prop="province">
                 <el-input v-model="cityForm.province" style="width: 70%" />
               </el-form-item>
-              <el-form-item label="救援人数">
+              <el-form-item label="救援人数" prop="people">
                 <el-input
                   v-model="cityForm.people"
                   style="width: 70%"
                 />
               </el-form-item>
-              <el-form-item label="救援车辆">
+              <el-form-item label="救援车辆" prop="cars">
                 <el-input v-model="cityForm.cars" style="width: 70%" />
               </el-form-item>
-              <el-form-item label="交通情况">
+              <el-form-item label="交通情况" prop="traffic">
                 <el-input v-model="cityForm.traffic" style="width: 70%" />
               </el-form-item>
             </el-form>
@@ -106,7 +107,6 @@
       "
       highlight-current-row
       @current-change="handleCurrentChange"
-      height="100%"
       style="width: 100%; margin-bottom: 6%"
     >
       <el-table-column fixed prop="ID" label="ID" width="80px">
@@ -257,6 +257,13 @@ export default {
           traffic:"通畅",
         },
       ],
+      rules:{
+        name: [{ required: true, message: "请输入城市名称", trigger: "blur" }],
+        province: [{ required: true, message: "请输入省份", trigger: "blur" }],
+        people: [{ required: true, message: "请输入救援人数", trigger: "blur" }],
+        cars: [{ required: true, message: "请输入救援车辆数", trigger: "blur" }],
+        traffic: [{ required: true, message: "请输入交通状况", trigger: "blur" }]
+      },
       search: "",
       currentRow: null,
       routeDialogVisible: false,
@@ -294,6 +301,8 @@ export default {
       this.clearForm();
     },
     handleNewCity() {
+      this.$refs.cityForm.validate((valid) => {
+        if (valid) {
       let newCity = JSON.parse(JSON.stringify(this.cityForm));
       this.getMaxID();
       newCity.ID = this.maxID + 1;
@@ -304,6 +313,13 @@ export default {
         type: "success",
       });
       this.clearForm();
+      }else {
+          this.$message({
+            message: "提交失败，请填写必填项！",
+          });
+          return false;
+        }
+      });
     },
     handleNewRoute(){
       this.routeDialogVisible = false;

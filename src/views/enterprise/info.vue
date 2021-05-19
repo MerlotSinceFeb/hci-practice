@@ -18,27 +18,28 @@
         >
           <span>
             <el-form
-              ref="form"
+              ref="cropForm"
               :model="form"
               label-width="auto"
               label-position="left"
+              :rules="rules"
             >
-              <el-form-item label="企业名称">
+              <el-form-item label="企业名称" prop="name">
                 <el-input v-model="form.name" style="width: 70%" />
               </el-form-item>
-              <el-form-item label="详细地址">
+              <el-form-item label="详细地址" prop="address">
                 <el-input v-model="form.address" style="width: 70%" />
               </el-form-item>
               <el-form-item label="详细经纬">
                 <el-input v-model="form.detail_address" style="width: 70%" />
               </el-form-item>
-              <el-form-item label="企业法人">
+              <el-form-item label="企业法人" prop="legal_entity">
                 <el-input v-model="form.legal_entity" style="width: 70%" />
               </el-form-item>
-              <el-form-item label="企业电话">
+              <el-form-item label="企业电话" prop="phone_number">
                 <el-input v-model="form.phone_number" style="width: 70%" />
               </el-form-item>
-              <el-form-item label="企业类型">
+              <el-form-item label="企业类型" prop="type">
                 <el-input v-model="form.type" style="width: 70%" />
               </el-form-item>
             </el-form>
@@ -225,6 +226,19 @@ export default {
           type: "公办企业",
         },
       ],
+      rules: {
+        name: [{ required: true, message: "请输入企业名称", trigger: "blur" }],
+        address: [
+          { required: true, message: "请输入企业地址", trigger: "blur" },
+        ],
+        legal_entity: [
+          { required: true, message: "请输入企业法人", trigger: "blur" },
+        ],
+        phone_number: [
+          { required: true, message: "请输入电话", trigger: "blur" },
+        ],
+        type: [{ required: true, message: "请输入企业类型", trigger: "blur" }],
+      },
       search: "",
       currentRow: null,
       centerDialogVisible: false,
@@ -260,16 +274,26 @@ export default {
       this.clearForm();
     },
     handleNewCorp() {
-      let newCorp = JSON.parse(JSON.stringify(this.form));
-      this.getMaxID();
-      newCorp.ID = this.maxID + 1;
-      this.tableData.push(newCorp);
-      this.centerDialogVisible = false;
-      this.$message({
-        message: "添加企业成功！",
-        type: "success",
+      this.$refs.cropForm.validate((valid) => {
+        if (valid) {
+          let newCorp = JSON.parse(JSON.stringify(this.form));
+          console.log("fuck")
+          this.getMaxID();
+          newCorp.ID = this.maxID + 1;
+          this.tableData.push(newCorp);
+          this.centerDialogVisible = false;
+          this.clearForm();
+          this.$message({
+            message: "新增企业成功！",
+            type: "success",
+          });
+        } else {
+          this.$message({
+            message: "提交失败，请填写必填项！",
+          });
+          return false;
+        }
       });
-      this.clearForm();
     },
     getMaxID() {
       // for (tempID in this.tableData.ID) {
