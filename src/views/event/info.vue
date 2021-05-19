@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <template>
   <div class="app-container">
     <div style="margin-top:50px">
@@ -7,14 +6,15 @@
         <div class="block" style="margin:20px">
           <el-tree
             :data="treeData"
-            node-key="label"
+            node-key="comments"
             ref="eventTree"
             show-checkbox
             :props="defaultProps"
             default-expand-all
             :expand-on-click-node="false"
             style="width:500px"
-            @check="show()">
+            @check="show()"
+            @check-change="handleClick">
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span>{{ node.label }}</span>
               <span>
@@ -58,7 +58,7 @@
         </el-card>
       </el-col>
       </el-row>
-      <el-row
+      <el-row>
         <el-col :span="17" offset="3">
           <el-card class="box-card">
             <el-row style="font-size:14px">
@@ -71,7 +71,7 @@
     </div>
 
     <el-dialog title="新增节点" :visible.sync="dialogFormVisible" style="width:1200px" @close="dialogFormClosed">
-      <el-form ref="refForm" :model="form" label-width="130px">
+      <el-form :rules="rules" ref="refForm" :model="form" label-width="130px">
         <el-form-item label="请输入节点名称" prop="name">
           <el-col :span="22">
             <el-input v-model="form.name" auto-complete="off" size="small"></el-input>
@@ -100,68 +100,77 @@ export default {
       treeData: [{
         label: '自然灾害',
         disabled: true,
+        comments: '测试备注1',
         children: [{
           label: '水灾',
           disabled: true,
+          comments: '测试备注2',
           children: [{
             label: '一级',
-            comments: '测试备注',
+            comments: '测试备注3',
             children: []
           }, {
             label: '二级',
-            comments: '测试备注',
+            comments: '测试备注4',
             children: []
           }]
         }, {
           label: '火灾',
           disabled: true,
+          comments: '测试备注5',
           children: [{
             label: '一级',
-            comments: '测试备注',
+            comments: '测试备注6',
             children: []
           }, {
             label: '二级',
-            comments: '测试备注',
+            comments: '测试备注7',
             children: []
           }]
         }]
       }, {
         label: '事故灾难',
         disabled: true,
+        comments: '测试备注8',
         children: [{
           label: '公交车侧翻',
           disabled: true,
+          comments: '测试备注9',
           children: [{
             label: '一级',
-            comments: '测试备注',
+            comments: '测试备注10',
             children: []
           }]
         }, {
           label: '工人猝死',
           disabled: true,
+          comments: '测试备注11',
           children: [{
             label: '一级',
-            comments: '测试备注',
+            comments: '测试备注12',
             children: []
           }]
         }]
       }, {
         label: '公共卫生事件',
+        comments: '测试备注13',
         disabled: true,
         children: [{
           label: '矿泉水污染',
+          comments: '测试备注14',
           disabled: true,
           children: [{
             label: '一级',
-            comments: '测试备注',
+            comments: '测试备注15',
             children: []
           }]
         }, {
           label: '流感',
+          comments: '测试备注16',
           disabled: true,
           children: [{
             label: '一级',
-            comments: '测试备注',
+            comments: '测试备注17',
             children: []
           }]
         }]
@@ -176,11 +185,25 @@ export default {
         name: '',
         comments: '',
         insert: []
-      }
+      },
+      rules: {
+          name: [
+            { required: true, message: '请输入节点名称', trigger: 'blur' }
+          ],
+          comments: [
+            { required: true, message: '请输入备注内容', trigger: 'blur' }
+          ]
+        }
     }
   },
   methods: {
-    // 方法
+    // methods
+    // final version
+    handleClick(data,checked, node){
+　　　　if(checked){
+　　　　　　this.$refs.eventTree.setCheckedNodes([data]);
+　　　　}
+　　},
     dialogFormClosed() {
       this.$refs.refForm.resetFields()
     },
@@ -221,7 +244,7 @@ export default {
     remove(node, data) {
       const parent = node.parent
       const children = parent.data.children || parent.data
-      const index = children.findIndex(d => d.label === data.label)
+      const index = children.findIndex(d => d.comments === data.comments)
       children.splice(index, 1)
       this.deleteSuccess()
     },

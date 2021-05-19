@@ -78,7 +78,7 @@
     </div>
 
     <el-dialog title="编辑信息" :visible.sync="dialogFormVisible" style="width:1000px" @close="dialogFormClosed">
-      <el-form ref="refForm" :model="form" label-width="120px">
+      <el-form :rules="rules" ref="refForm" :model="form" label-width="120px">
         <el-form-item label="物资存放名称" :label-width="formLabelWidth" prop="name">
           <el-col :span="20">
             <el-input v-model="form.name" auto-complete="off" size="small"></el-input>
@@ -91,7 +91,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="addInfo()">确认信息</el-button>
+        <el-button type="primary" @click="submitForm()">确认信息</el-button>
         <el-button @click="dialogFormVisible = false">取 消</el-button>
       </div>
     </el-dialog>
@@ -136,11 +136,20 @@ export default {
       form: {
         name: '',
         content: ''
-      }
+      },
+      rules: {
+          name: [
+            { required: true, message: '请输入位置名称', trigger: 'blur' }
+          ],
+          content: [
+            { required: true, message: '请输入物资内容', trigger: 'blur' }
+          ]
+        }
     }
   },
   methods: {
     //methods
+    // final version
     deleteRow(index, rows) {
       rows.splice(index, 1)
       this.deleteSuccess()
@@ -157,6 +166,12 @@ export default {
         type: 'success'
       })
     },
+    editSuccess() {
+      this.$message({
+        message: '成功编辑信息',
+        type: 'success'
+      })
+    },
     dialogFormClosed() {
       this.$refs.refForm.resetFields()
     },
@@ -166,6 +181,15 @@ export default {
         newID = Math.max(parseInt(this.tableData[i].ID), newID)
       }
       return newID + 1
+    },
+    submitForm() {
+      this.$refs.refForm.validate((valid) => {
+        if (valid) {
+          this.addInfo()
+        } else {
+          return false;
+        }
+      });
     },
     addInfo() {
       this.tableData.push({
@@ -179,6 +203,7 @@ export default {
     handleClick(row) {
       if (row.isEdit) {
         this.$delete(row, 'isEdit')
+        this.editSuccess()
       } else {
         this.$set(row, 'isEdit', true)
       }

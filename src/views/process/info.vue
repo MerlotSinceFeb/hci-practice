@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <template>
   <div class="app-container" style="margin-left:20px">
     <div class="filter-container" style="margin-top:20px">
@@ -102,7 +101,7 @@
     </div>
 
     <el-dialog title="编辑信息" :visible.sync="dialogFormVisible" style="width:1000px" @close="dialogFormClosed">
-      <el-form ref="refForm" :model="form" label-width="80px">
+      <el-form :rules="rules" ref="refForm" :model="form" label-width="80px">
         <el-form-item label="模板名称" :label-width="formLabelWidth" prop="name">
           <el-col :span="20">
             <el-input v-model="form.name" auto-complete="off" size="small"></el-input>
@@ -125,7 +124,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="addInfo()">确认信息</el-button>
+        <el-button type="primary" @click="submitForm()">确认信息</el-button>
         <el-button @click="dialogFormVisible = false">取 消</el-button>
       </div>
     </el-dialog>
@@ -192,11 +191,26 @@ export default {
         type: '',
         typeCode: '',
         content: ''
-      }
+      },
+      rules: {
+          name: [
+            { required: true, message: '请输入模板名称', trigger: 'blur' }
+          ],
+          type: [
+            { required: true, message: '请输入模板类型', trigger: 'blur' }
+          ],
+          typeCode: [
+            { required: true, message: '请输入类型编码', trigger: 'blur' }
+          ],
+          content: [
+            { required: true, message: '请输入模板内容', trigger: 'blur' }
+          ]
+        }
     }
   },
   methods: {
     // methods
+    // final version
     deleteRow(index, rows) {
       rows.splice(index, 1)
       this.deleteSuccess()
@@ -228,6 +242,15 @@ export default {
         newID = Math.max(parseInt(this.tableData[i].ID), newID)
       }
       return newID + 1
+    },
+    submitForm() {
+      this.$refs.refForm.validate((valid) => {
+        if (valid) {
+          this.addInfo()
+        } else {
+          return false;
+        }
+      });
     },
     addInfo() {
       this.tableData.push({
