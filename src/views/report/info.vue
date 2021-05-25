@@ -253,6 +253,7 @@ import { getList } from '@/api/table';
 export default {
   data() {
     return {
+      bigMessage: '劲爆大象部落',
       suggest1: [],
       suggest2: [],
       suggest3: [],
